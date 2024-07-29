@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/customer_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock  %}
+
+{% block content %}
+
+
+<div class="container details_container">
+  <div class="row">
+    <div class="col-3"></div>
+<div class="main-container">
+    <div class="sidenav">
+        <div class="elements text-center">
+          <div class="image">
+            {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="detail_image" style="max-width: 200px;">
+            {% else %}
+            <p><img src="{% static 'images/pfp.jpeg' %}" alt="" class="detail_image"> </p>
+              {% endif %}
+            
+      
+                  <p style="color: white !important; ">@{{ user.username }}</p> </p>
+              
+          </div>
+          <a href="" class="{% if '/customer_details/' in request.path %}
+          active-dashboard
+      {% endif %} ">DETAILS</a>
+          <a href="" class="{% if '/renting/' in request.path %}
+          active-dashboard
+      {% endif %} ">Cart</a>
+          <a href="{% url 'log_out' %}"><button type="button" class="btn btn-primary">SignOut</button></a>
+        </div>
+      </div>
+      
+          <div class="col-md-4">
+            <h1 style="margin-top: 20px; font-variant: small-caps;">Your Details</h1>
+      
+            {% if profile.profile_picture %}
+            <p><img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="detail_image"></p>
+            {% else %}
+            <p><img src="{% static 'images/profile.png' %}" alt="" class="detail_image"></p>
+              {% endif %}
+            
+            <p><strong>Username: @{{ user.username }}</strong></p>
+            <p><strong>Fullname:{{ user.first_name}}</strong></p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+          </div>
+      
+          <div class="col-md-5">
+              <h1 style="margin-top: 20px; font-variant: small-caps;">Update Details</h1>
+              <form method="post" enctype="multipart/form-data" style="text-align: left !important;">
+                {% csrf_token %}
+                {{ profile_form.as_p }}
+              {{ user_form.as_p }}
+              
+              <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+</div>
+
+{% endblock content %}
+  
+
+
+
+{% block footer-js %}
+{% if messages %}
+{% for message in messages %}
+<script>
+  alertify.set('notifier', 'position', 'top-center');
+  alertify.success('{{message}}');
+</script>
+{% endfor %}
+{% endif %}
+{% endblock footer-js %}
